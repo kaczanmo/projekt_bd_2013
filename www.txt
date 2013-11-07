@@ -1,2 +1,2 @@
-http://www.techienote.com/tag/oracle-database-11g-r2-on-ubuntu-12-04
 tu jest instrukcja jak zainstalowac.
+http://www.techienote.com/tag/oracle-database-11g-r2-on-ubuntu-12-04
