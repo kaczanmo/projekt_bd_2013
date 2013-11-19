@@ -1,0 +1,33 @@
+windows baza db_all SID:dball
+konta DB : 
+scott:tiger
+system:grzegorz1
+
+Sekwencja uruchomienia DB:
+1] services.msc -> OracleServiceDBALL, ...Agent, ...Ctl -> run
+2] lsnrctl start
+3]
+
+lsnrctl status, lsnrctl start
+emctl stop dbconsole, emctl start dbconsole
+tnsping db_all
+
+create snapshot rep_dept refresh fast next sysdate + 1/17280 as select deptno, dname, loc from dept@db_ao;
+create snapshot rep_images refresh fast next sysdate + 1/17280 as select id, name, date, user_id, url from images@db_ao;
+
+=============================================================================================
+=============================================================================================
+virtualbox oracle EL 1
+
+err () error while loading shared libraries:...) ->  ( echo 0 >/selinux/enforce)
+
+baza db_ao, SID:dbao
+konto u¿ytkownika linux oracle:grzegorz1
+konta DB :
+system:aa
+scott:tiger
+
+==============================================================================================
+
+
+==============================================================================================
