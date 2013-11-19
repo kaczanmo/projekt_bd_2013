@@ -1,2 +1,7 @@
 tu jest instrukcja jak zainstalowac.
 http://www.techienote.com/tag/oracle-database-11g-r2-on-ubuntu-12-04
+
+Implementacja rozproszonych baz danych w Oracle
+http://www.bd.pjwstk.edu.pl/BazaWiedzy/wyklad13/ImplementacjaOracle.htm
+
+http://www.orafaq.com/wiki/Materialized_view

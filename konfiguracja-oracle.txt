@@ -13,7 +13,7 @@ emctl stop dbconsole, emctl start dbconsole
 tnsping db_all
 
 create snapshot rep_dept refresh fast next sysdate + 1/17280 as select deptno, dname, loc from dept@db_ao;
-create snapshot rep_images refresh fast next sysdate + 1/17280 as select id, name, date, user_id, url from images@db_ao;
+create snapshot rep_images refresh fast next sysdate + 1/17280 as select id, name, date_cr, user_id, url from images@db_ao;
 
 =============================================================================================
 =============================================================================================
