@@ -3,5 +3,15 @@ http://www.techienote.com/tag/oracle-database-11g-r2-on-ubuntu-12-04
 
 Implementacja rozproszonych baz danych w Oracle
 http://www.bd.pjwstk.edu.pl/BazaWiedzy/wyklad13/ImplementacjaOracle.htm
+http://edu.pjwstk.edu.pl/wyklady/sbd/scb/w14.htm
 
 http://www.orafaq.com/wiki/Materialized_view
+
+http://www.instalki.pl/demonstracje/systemowe/11227-virtualbox-uruchamianie-wirtualnej-maszyny-cz-i.html
+http://www.slideshare.net/powerhan96/networking-between-host-and-guest-v-ms-in-virtual-box
+
+https://www.oratoolkit.ch/knowledge/howto/installation/eeSrv-11g-R2-on-OEL-5.8-x86_64.php
+
+error ORACLE_UNQNAME
+http://blog.mclaughlinsoftware.com/2012/08/23/whats-oracle_unqname/
+
