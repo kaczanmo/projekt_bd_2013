@@ -5,6 +5,9 @@ Implementacja rozproszonych baz danych w Oracle
 http://www.bd.pjwstk.edu.pl/BazaWiedzy/wyklad13/ImplementacjaOracle.htm
 http://edu.pjwstk.edu.pl/wyklady/sbd/scb/w14.htm
 
+fragmentacja pozioma i pionowa
+http://edu.pjwstk.edu.pl/wyklady/kor/scb/w11/w11.htm
+
 http://www.orafaq.com/wiki/Materialized_view
 
 http://www.instalki.pl/demonstracje/systemowe/11227-virtualbox-uruchamianie-wirtualnej-maszyny-cz-i.html
@@ -15,3 +18,7 @@ https://www.oratoolkit.ch/knowledge/howto/installation/eeSrv-11g-R2-on-OEL-5.8-x
 error ORACLE_UNQNAME
 http://blog.mclaughlinsoftware.com/2012/08/23/whats-oracle_unqname/
 
+
+APLIKACJA JAVA
+http://alvinalexander.com/ooa-ood/java-model-view-controller-mvc-example-1
+http://www.mkyong.com/hibernate/maven-3-hibernate-3-6-oracle-11g-example-xml-mapping/

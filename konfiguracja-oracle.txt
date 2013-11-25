@@ -13,9 +13,10 @@ lsnrctl status, lsnrctl start
 emctl stop dbconsole, emctl start dbconsole
 tnsping db_all
 
+create database link db_ao connect to scott identified by tiger using 'db_ao';
 create snapshot rep_dept refresh fast next sysdate + 1/17280 as select deptno, dname, loc from dept@db_ao;
 create snapshot rep_images refresh fast next sysdate + 1/17280 as select id, name, date_cr, user_id, url from images@db_ao;
-create table images 
+create snapshot rep_images refresh next sysdate + 1/17280 as select id, name, date_cr, user_id, url from images@db_ao UNION SELECT id, name, date_cr, user_id, url from images@db_pz;
 =============================================================================================
 =============================================================================================
 virtualbox oracle EL 1
@@ -29,7 +30,7 @@ system:aa
 scott:tiger
 
 ==============================================================================================
-virtualbox oracle EL 1
+virtualbox oracle EL 2
 baza db_pz, SID:dbpz
 konto u¿ytkownika linux oracle:grzegorz1
 konta DB :
