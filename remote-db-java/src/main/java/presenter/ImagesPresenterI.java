@@ -6,7 +6,7 @@ import view.ImagesViewI;
 import view.LoginViewI;
 
 public interface ImagesPresenterI {
-	  ImagesModelI getModel();
+	    ImagesModelI getModel();
 
 	    void setModel(ImagesModelI model);
 
@@ -19,4 +19,5 @@ public interface ImagesPresenterI {
 	    void run();
 
 	    //void login();
+
 }

@@ -13,10 +13,16 @@ public class ImagesModel implements ImagesModelI {
 		ImageDAOI imageDao = new ImageDAOImpl();
 		ArrayList<Image> imagesList = new ArrayList<Image>(imageDao.findAll());
 		return imagesList;
+	}
+	
+	public void updateImage(Image img) {
+		ImageDAOI imageDao = new ImageDAOImpl();
+		imageDao.makePersistent(img);
+	}
+
+	public void deleteImage(Image img) {
+		ImageDAOI imageDao = new ImageDAOImpl();
+		imageDao.makeTransient(img);
 		
-//		for(Image i : imagesList)
-//		{
-//			System.err.println(i);
-//		}
 	}
 }

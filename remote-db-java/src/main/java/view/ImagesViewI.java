@@ -8,7 +8,7 @@ public interface ImagesViewI {
 
     void setPresenter(ImagesPresenterI presenter);
 
-    void updateModelFromView();
+    void updateModelFromView(boolean isChanged, boolean isDeleted);
 
     void updateViewFromModel();
 

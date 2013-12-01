@@ -33,5 +33,4 @@ public class ImagesPresenter implements ImagesPresenterI {
 		imagesView.open();
 		
 	}
-
 }

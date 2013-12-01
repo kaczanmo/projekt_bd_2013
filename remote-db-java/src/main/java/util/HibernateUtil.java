@@ -5,12 +5,13 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtil {
 
-	private static String hibernateConfig = "hibernate.cfg.xml";
+	private static String hibernateConfig = "";
 	private static HibernateUtil instance = null;
 	private SessionFactory sessionFactory = null;
 
 	private HibernateUtil() {
 		try {
+			System.err.println("config file : "+hibernateConfig);
 			sessionFactory = new AnnotationConfiguration().configure(
 					hibernateConfig).buildSessionFactory();
 		} catch (Exception e) {
@@ -27,6 +28,14 @@ public class HibernateUtil {
 
 	public synchronized SessionFactory getSessionFactory() {
 		return sessionFactory;
+	}
+
+	public static String getHibernateConfig() {
+		return hibernateConfig;
+	}
+
+	public static void setHibernateConfig(String hibernateConfig) {
+		HibernateUtil.hibernateConfig = hibernateConfig;
 	}
 
 }

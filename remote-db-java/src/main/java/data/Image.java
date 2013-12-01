@@ -6,8 +6,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
@@ -21,18 +24,19 @@ public class Image  implements Serializable  {
 	private static final long serialVersionUID = 4977748569131869076L;
 
 	@Id
-	@GeneratedValue
+	@GenericGenerator(name="imggen" , strategy="increment")
+	@GeneratedValue(generator="imggen")
 	@Column(name = "id")
-	private int id;
+	private Long id;
 	
 	@Column(name = "name", nullable=true)
 	private String name;
 
 	@Column(name = "date_cr", nullable=true)
-	private Date data;
+	private Date date;
 	
 	@Column(name = "user_id", nullable=true)
-	private Integer user_id;
+	private Long user_id;
 	
 	@Column(name = "url", nullable=true)
 	private String url;
@@ -42,21 +46,29 @@ public Image() {
 	super();
 }
 
-public Image(int id, String name, Date data, int user_id, String url) {
+public Image(Long id, String name, Date data, Long user_id, String url) {
 	super();
 	this.id = id;
 	this.name = name;
-	this.data = data;
+	this.date = data;
 	this.user_id = user_id;
 	this.url = url;
 
 }
 
-public int getId() {
+public Image(Object[] obj) {
+	this.setId((Long) obj[0]);
+	this.setName((String) obj[1]);
+	this.setDate((Date) obj[2]);
+	this.setUser_id((Long)  obj[3]);
+	this.setUrl((String) obj[4]);
+}
+
+public Long getId() {
 	return id;
 }
 
-public void setId(int id) {
+public void setId(Long id) {
 	this.id = id;
 }
 
@@ -68,19 +80,19 @@ public void setName(String name) {
 	this.name = name;
 }
 
-public Date getData() {
-	return data;
+public Date getDate() {
+	return date;
 }
 
-public void setData(Date data) {
-	this.data = data;
+public void setDate(Date date) {
+	this.date = date;
 }
 
-public int getUser_id() {
+public Long getUser_id() {
 	return user_id;
 }
 
-public void setUser_id(int user_id) {
+public void setUser_id(Long user_id) {
 	this.user_id = user_id;
 }
 
@@ -96,10 +108,12 @@ public void setUrl(String url) {
 
 @Override
 public String toString() {
-	return "Image [id=" + id + ", name=" + name + ", data=" + data
+	return "Image [id=" + id + ", name=" + name + ", date=" + date
 			+ ", user_id=" + user_id + ", url=" + url + "]";
 }
-	
+public Object[] toArray() {
+	return new Object[]{id,name,date,user_id,url};
+}	
 	
 
 }

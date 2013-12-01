@@ -26,11 +26,29 @@ import view.LoginViewI;
 import view.LoginView;
 
 public class Application {
+	
+	public enum Mode{
+		DBALL, DBAO, DBPZ
+	}
+	public static Mode appMode = null;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+//		for (String s: args) 
+//            System.out.println(s);
+
+		if(args.length > 0){
+			appMode = Mode.valueOf(args[0]);
+			if(appMode.equals(Mode.DBALL))
+				HibernateUtil.setHibernateConfig("hibernate_DBALL.cfg.xml");
+			if(appMode.equals(Mode.DBAO))
+				HibernateUtil.setHibernateConfig("hibernate_DBAO.cfg.xml");
+			if(appMode.equals(Mode.DBPZ))
+				HibernateUtil.setHibernateConfig("hibernate_DBPZ.cfg.xml");
+		}
+//			
 		// TODO Auto-generated method stub
 		System.out.println("Maven + Hibernate + Oracle");
 

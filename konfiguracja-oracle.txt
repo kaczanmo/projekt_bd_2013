@@ -1,3 +1,4 @@
+Oracle Enterprise Linux 5.8 download
 windows baza db_all SID:dball
 konta DB : 
 scott:tiger
@@ -28,6 +29,16 @@ konto u¿ytkownika linux oracle:grzegorz1
 konta DB :
 system:aa
 scott:tiger
+
+create or replace trigger
+images_insert before insert on images
+for each row 
+when (new.id is null)
+begin
+select sequence1.nextval into :new.id
+from dual;
+end;
+
 
 ==============================================================================================
 virtualbox oracle EL 2
