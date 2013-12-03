@@ -1,5 +1,4 @@
-cd target\classes
-start  javaw  bin com.Application
+cmd /c start javaw -jar app-remote-db.jar DBALL
 
 
 
