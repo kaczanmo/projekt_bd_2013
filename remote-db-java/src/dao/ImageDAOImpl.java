@@ -10,8 +10,4 @@ import data.Image;
 public class ImageDAOImpl extends GenericHibernateDAO<Image, Long> implements
 		ImageDAOI {
 
-
-	
-	
-	
 }

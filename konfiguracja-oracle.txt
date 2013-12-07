@@ -17,7 +17,7 @@ tnsping db_all
 create database link db_ao connect to scott identified by tiger using 'db_ao';
 create snapshot rep_dept refresh fast next sysdate + 1/17280 as select deptno, dname, loc from dept@db_ao;
 create snapshot rep_images refresh fast next sysdate + 1/17280 as select id, name, date_cr, user_id, url from images@db_ao;
-create snapshot images refresh next sysdate + (1/(24*60*2)) as select id, name, date_cr, user_id, url from images@db_ao UNION SELECT id, name, date_cr, user_id, url from images@db_pz;
+create snapshot images refresh next sysdate + (1/(24*60*2)) as select id, name, date_cr, user_id, img_data from images@db_ao UNION SELECT id, name, date_cr, user_id, img_data from images@db_pz;
 =============================================================================================
 =============================================================================================
 virtualbox oracle EL 1
@@ -30,14 +30,98 @@ konta DB :
 system:aa
 scott:tiger
 
-create or replace trigger
-images_insert before insert on images
+ CREATE TABLE "SCOTT"."IMAGES" 
+   (	"ID" NUMBER(*,0), 
+	"NAME" VARCHAR2(255 BYTE), 
+	"DATE_CR" DATE, 
+	"USER_ID" NUMBER(*,0), 
+	"IMG_DATA" BLOB, 
+	 PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" 
+ LOB ("IMG_DATA") STORE AS BASICFILE (
+  TABLESPACE "USERS" ENABLE STORAGE IN ROW CHUNK 8192 RETENTION 
+  NOCACHE LOGGING 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
+ 
+
+  CREATE OR REPLACE TRIGGER "SCOTT"."IMAGES_INSERT" before insert on images
 for each row 
-when (new.id is null)
-begin
+ WHEN (new.id is null) begin
 select sequence1.nextval into :new.id
 from dual;
 end;
+/
+ALTER TRIGGER "SCOTT"."IMAGES_INSERT" ENABLE;
+
+
+
+  CREATE TABLE "SCOTT"."IMG_USERS" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"NAME" VARCHAR2(20 BYTE), 
+	"EMAIL" VARCHAR2(20 BYTE), 
+	 CONSTRAINT "IMG_USER_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+  REM INSERTING into IMG_USERS
+Insert into IMG_USERS (ID,NAME,EMAIL) values (1,'USER_AO','ao@email.pl');
+Insert into IMG_USERS (ID,NAME,EMAIL) values (2,'USER_PZ','pz@email.pl');
+
+
+
+////////////////////  utworzenie migawki  http://jiri.wordpress.com/tag/ora-22992/  (solution 1)
+create global temporary table LocalTempTableWithBlob
+ (ID NUMBER, 
+	NAME VARCHAR2(255 BYTE), 
+	DATE_CR DATE, 
+	USER_ID NUMBER, 
+	IMG_DATA BLOB ) ON COMMIT PRESERVE ROWS;
+	
+create or replace TYPE object_row_type AS OBJECT (
+ID NUMBER, 
+	NAME VARCHAR2(255 BYTE), 
+	DATE_CR DATE, 
+	USER_ID NUMBER, 
+	IMG_DATA BLOB   );
+
+CREATE TYPE object_table_type AS TABLE OF object_row_type;
+
+create or replace FUNCTION GETBLOB RETURN object_table_type PIPELINED IS
+PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+ insert into LocalTempTableWithBlob (select id, name, date_cr, user_id, img_data from images@db_ao  );
+ insert into LocalTempTableWithBlob (select id, name, date_cr, user_id, img_data from images@db_pz  );
+ commit;
+ FOR cur IN (SELECT id, name, date_cr, user_id, img_data from LocalTempTableWithBlob)
+ LOOP
+   PIPE ROW(object_row_type(cur.id, cur.name, cur.date_cr, cur.user_id, cur.img_data));
+ END LOOP;
+ DELETE FROM LocalTempTableWithBlob;
+ COMMIT;
+ RETURN;
+END;
+
+create view myRemoteData as
+SELECT * FROM TABLE(GetBlob) a;	
+
+select id,name, date_cr, user_id, img_data mytext from myRemoteData;
+
+create snapshot images refresh next sysdate + (1/(24*60*2)) as select id,name, date_cr, user_id,  img_data from myRemoteData;
 
 
 ==============================================================================================

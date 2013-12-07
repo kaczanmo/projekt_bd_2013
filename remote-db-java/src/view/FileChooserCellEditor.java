@@ -22,6 +22,7 @@ public class FileChooserCellEditor extends DefaultCellEditor implements TableCel
 {
     /** Number of clicks to start editing */
     private static final int CLICK_COUNT_TO_START = 2;
+    private static final int MAX_KB_IMAGE_SIZE = 100;
     /** Editor component */
     private JButton button;
     /** File chooser */
@@ -47,7 +48,7 @@ public class FileChooserCellEditor extends DefaultCellEditor implements TableCel
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(true);
-
+        fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setFileFilter(new FileFilter() {
         	 
             public String getDescription() {
@@ -63,15 +64,11 @@ public class FileChooserCellEditor extends DefaultCellEditor implements TableCel
                     		(fName.endsWith(".png")  || fName.endsWith(".jpeg") ||
                     				fName.endsWith(".jpg") || fName.endsWith(".gif") ||
                     				fName.endsWith(".ico") || fName.endsWith(".bmp")  ) 
-                    				&& f.length()<(1024*80));
+                    				&& f.length()<(1024*MAX_KB_IMAGE_SIZE));
                 }
             }
         });
         
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-//                "--Images--", "jpg", "gif", "jpeg", "bmp", "ico");
-//        fileChooser.setFileFilter(filter);
-
     }
 
     @Override
@@ -87,7 +84,11 @@ public class FileChooserCellEditor extends DefaultCellEditor implements TableCel
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 fileChooser.setSelectedFile(new File("/"));
-                if (fileChooser.showOpenDialog(button) == JFileChooser.OPEN_DIALOG) {
+                int retBtn = fileChooser.showOpenDialog(button);
+                if(retBtn == JFileChooser.CANCEL_OPTION){
+                	fireEditingCanceled();	
+                }
+                else if (retBtn == JFileChooser.OPEN_DIALOG) {
 //                	data = fileChooser.getSelectedFile().getAbsolutePath();
                     
                     File file = fileChooser.getSelectedFile();
@@ -101,7 +102,7 @@ public class FileChooserCellEditor extends DefaultCellEditor implements TableCel
         			    e1.printStackTrace();
         			}
                 }
-                else
+                else 
                 	data = null;
                 fireEditingStopped();
             }

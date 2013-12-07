@@ -11,6 +11,7 @@ import com.Application;
 import com.Application.Mode;
 
 import data.Image;
+import data.User;
 
 public class MyTableModel extends AbstractTableModel {
 	/**
@@ -20,7 +21,7 @@ public class MyTableModel extends AbstractTableModel {
 	private boolean DEBUG = false;
     private String[] columnNames = {"Id", "Nazwa",
                                     "Data utworzenia",
-                                    "Id user", "img name", "img data"};
+                                    "U¿ytkownik", "Obraz"};
 //    private Object[][] data  = {
             //{1, "Obraz1","10/10/10", new Integer(1), "www"}
 //               };
@@ -47,8 +48,10 @@ public class MyTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-    	if(row < getRowCount() && col < 6)
-        return data.get(row)[col];
+    	if(row < getRowCount() && col == 3)
+    		return ((User)data.get(row)[col]).getName();
+    	else if(row < getRowCount() && col < 5)
+    		return data.get(row)[col];
 		return null;
     }
 
@@ -64,8 +67,7 @@ public class MyTableModel extends AbstractTableModel {
     	if(c==1) return String.class;
     	if(c==2) return Date.class;
     	if(c==3) return Long.class;
-    	if(c==4) return String.class;
-    	if(c==5) return byte[].class;
+    	if(c==4) return byte[].class;
 		return String.class;
     }
  
@@ -77,7 +79,7 @@ public class MyTableModel extends AbstractTableModel {
         //Note that the data/cell address is constant,
         //no matter where the cell appears onscreen.
     	
-    	if(col < 1 || Application.appMode.equals(Mode.DBALL))
+    	if(col < 1 || col==3 || Application.appMode.equals(Mode.DBALL))
     		return false;
     	
     	if(Application.appMode.equals(Mode.DBAO) || Application.appMode.equals(Mode.DBPZ))

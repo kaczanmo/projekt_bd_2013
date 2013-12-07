@@ -7,8 +7,5 @@ import util.GenericDAO;
 
 
 public interface ImageDAOI extends GenericDAO<Image, Long> {
-	
-//	Image findByName(String name);
-
 
 }

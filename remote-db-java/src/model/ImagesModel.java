@@ -5,7 +5,10 @@ import java.util.List;
 
 import dao.ImageDAOI;
 import dao.ImageDAOImpl;
+import dao.UserDAOI;
+import dao.UserDAOImpl;
 import data.Image;
+import data.User;
 
 public class ImagesModel implements ImagesModelI {
 
@@ -23,6 +26,13 @@ public class ImagesModel implements ImagesModelI {
 	public void deleteImage(Image img) {
 		ImageDAOI imageDao = new ImageDAOImpl();
 		imageDao.makeTransient(img);
+		
+	}
+
+	public User getUser(Long id) {
+		UserDAOI userDao = new UserDAOImpl();
+		User user =  userDao.findById(id, false);
+		return user;
 		
 	}
 }

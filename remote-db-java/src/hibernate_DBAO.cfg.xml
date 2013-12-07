@@ -31,6 +31,7 @@
   <!-- Class mapping com..model.data -->
 
    <mapping class = "data.Image" /> 
+   <mapping class = "data.User" /> 
 
   
   <!-- com.projectmanagement.helpers.i18n.data -->

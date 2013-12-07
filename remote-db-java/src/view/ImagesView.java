@@ -48,8 +48,10 @@ import oracle.sql.BLOB;
 
 import com.Application;
 import com.Application.Mode;
+import com.toedter.calendar.JDateChooserCellEditor;
 
 import data.Image;
+import data.User;
 
 import java.awt.Button;
 import java.awt.Color;
@@ -81,7 +83,6 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 	private Button bSave = null;
 	private Button bDel = null;
 	private Button bAdd = null;
-	private java.awt.Image imagePreview = null;
 	private JLabel labelImg = null;
 	private static final int IMG_WIDTH = 100;
 	private static final int IMG_HEIGHT = 100;
@@ -89,7 +90,7 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 	
 	
 	public ImagesView(){
-		super("RDB");
+		super("RDB"+" - "+Application.appMode.toString());
 		initComponents();
 	}
 
@@ -193,7 +194,7 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 
 		});
         fileChooserCellEditor = new FileChooserCellEditor();
-		table.getColumnModel().getColumn(5).setCellEditor(fileChooserCellEditor);
+		table.getColumnModel().getColumn(4).setCellEditor(fileChooserCellEditor);
 		fileChooserCellEditor.addCellEditorListener(new CellEditorListener() {
 			
 			@Override
@@ -208,6 +209,8 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 				
 			}
 		});
+		table.getColumnModel().getColumn(1).setCellEditor(new ImageNameCellEditor(new ImageNameVerifier()));
+		table.getColumnModel().getColumn(2).setCellEditor(new JDateChooserCellEditor());
 	    
 	    scrollPane = new JScrollPane(table);
 	    scrollPane.setSize(450,250);
@@ -343,8 +346,7 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 					tableModel.deleteRow(i);
 			
 			tableModel.fireTableDataChanged();
-			tableModel.fireTableStructureChanged();
-			
+			bSave.setEnabled(false);
 			updateViewFromModel();
 		} 
 		else if(cel == bSave){
@@ -367,25 +369,35 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 		}
 		else if(cel == bAdd){
 			filterText.setText("");
+	
 			
-			///
-			//TODO
-			File file = new File("C:\\Users\\Tenac\\Desktop\\obrazy\\barilla.bmp");
-			byte[] imageData = new byte[(int) file.length()];
+			InputStream sourceimage = this.getClass().getResourceAsStream("/default.jpg");
+			byte[] imageData = null;
+			try {
+				imageData = new byte[(int) sourceimage.available()];
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			 
 			try {
-			    FileInputStream fileInputStream = new FileInputStream(file);
-			    fileInputStream.read(imageData);
-			    fileInputStream.close();
+				sourceimage.read(imageData);
+				sourceimage.close();
 			} catch (Exception e1) {
 			    e1.printStackTrace();
 			}
 			
-			tableModel.addRow(new Image(null, "",new Date(), 1L, imageData).toArray(),true);
+			User user = null;
+			if(Application.appMode.equals(Mode.DBAO))
+				user = getPresenter().getModel().getUser(1L);
+			else 	if(Application.appMode.equals(Mode.DBPZ))
+				user = getPresenter().getModel().getUser(2L);
+			
+			tableModel.addRow(new Image(null, "",new Date(),user , imageData).toArray(),true);
 			bSave.setEnabled(true);	
 			sorter.allRowsChanged();
 			//zaznacz wiersz do edycji
-			table.setRowSelectionInterval(0, 0);
+			table.setRowSelectionInterval(tableModel.getRowCount()-1, tableModel.getRowCount()-1);
 			scrollPane.repaint();
 		}
 	}
@@ -433,7 +445,7 @@ public class ImagesView extends JFrame implements ImagesViewI, Serializable, Act
 		}
 	 
 		private void showImgPreviewInTable(int modelRow) {
-			  byte[] imageSelData = (byte[]) tableModel.getData().get(modelRow)[5];
+			  byte[] imageSelData = (byte[]) tableModel.getData().get(modelRow)[4];
             File tmpFile = null;
             try {
 					tmpFile = File.createTempFile("tmp", ".tmp");

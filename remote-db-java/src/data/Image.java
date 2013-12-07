@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -36,13 +38,12 @@ public class Image  implements Serializable  {
 	@Column(name = "date_cr", nullable=true)
 	private Date date;
 	
-	@Column(name = "user_id", nullable=true)
-	private Long user_id;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 	
-	@Column(name = "img_name", nullable=true)
-	private String imgName;
 	
-	@Column(name = "img_data", nullable=false, columnDefinition="mediumblob")
+	@Column(name = "img_data", nullable=true)
 	private byte[] imgData;
 
 
@@ -50,12 +51,12 @@ public Image() {
 	super();
 }
 
-public Image(Long id, String name, Date data, Long user_id, byte[] imgData) {
+public Image(Long id, String name, Date data, User user, byte[] imgData) {
 	super();
 	this.id = id;
 	this.name = name;
 	this.date = data;
-	this.user_id = user_id;
+	this.user = user;
 	this.imgData = imgData;
 
 }
@@ -64,9 +65,8 @@ public Image(Object[] obj) {
 	this.setId((Long) obj[0]);
 	this.setName((String) obj[1]);
 	this.setDate((Date) obj[2]);
-	this.setUser_id((Long)  obj[3]);
-	this.setImgName((String) obj[4]);
-	this.setImgData((byte[]) obj[5]);
+	this.setUser((User)  obj[3]);
+	this.setImgData((byte[]) obj[4]);
 }
 
 public Long getId() {
@@ -93,12 +93,12 @@ public void setDate(Date date) {
 	this.date = date;
 }
 
-public Long getUser_id() {
-	return user_id;
+public User getUser() {
+	return user;
 }
 
-public void setUser_id(Long user_id) {
-	this.user_id = user_id;
+public void setUser(User user) {
+	this.user = user;
 }
 
 
@@ -111,21 +111,13 @@ public void setImgData(byte[] imgData) {
 }
 
 
-public String getImgName() {
-	return imgName;
-}
-
-public void setImgName(String imgName) {
-	this.imgName = imgName;
-}
-
 @Override
 public String toString() {
 	return "Image [id=" + id + ", name=" + name + ", date=" + date
-			+ ", user_id=" + user_id /*+ ", imgBlob=" + imgBlob*/ + "]";
+			+ ", user_id=" + user /*+ ", imgBlob=" + imgBlob*/ + "]";
 }
 public Object[] toArray() {
-	return new Object[]{id,name,date,user_id,imgName,imgData};
+	return new Object[]{id,name,date,user,imgData};
 }	
 	
 
