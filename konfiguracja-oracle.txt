@@ -1,4 +1,6 @@
 Oracle Enterprise Linux 5.8 download
+Enterprise-R5-U9-Server-i386-dvd
+linux_11gR2_database
 windows baza db_all SID:dball
 konta DB : 
 scott:tiger
