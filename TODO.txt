@@ -1,4 +1,4 @@
-?- czy replikacja dzia³a bez routera
++ czy replikacja dzia³a bez routera
 + walidacja nazwy podczas zmiany nazwy obrazu
 + ladowanie obrazka (podgl¹d)
 + dla wez³ów daj na sta³e userów - [db_ao - user ao] [db_pz - user pz]
